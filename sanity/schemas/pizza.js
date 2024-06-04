@@ -1,4 +1,5 @@
 import { MdLocalPizza as icon } from 'react-icons/md';
+import PriceInput from '../components/PriceInput';
 
 export default {
   // schema name
@@ -41,6 +42,50 @@ export default {
       // min $10.00 / max $50.00
       validation: (Rule) => Rule.min(1000).max(50000),
       // TODO: Add custom input component
+      inputComponent: PriceInput,
+    },
+    {
+      name: 'toppings',
+      title: 'Toppings',
+      type: 'array',
+      of: [
+        {
+          type: 'reference',
+          to: [
+            {
+              type: 'topping',
+            },
+          ],
+        },
+      ],
     },
   ],
+  preview: {
+    select: {
+      title: 'name',
+      media: 'image',
+      toppings0: 'toppings.0.name',
+      toppings1: 'toppings.1.name',
+      toppings2: 'toppings.2.name',
+      toppings3: 'toppings.3.name',
+      nToppings: 'toppings.length',
+    },
+    prepare: ({ title, media, nToppings, ...toppings }) => {
+      let desc = '';
+      const filteredToppings = Object.values(toppings).filter(Boolean);
+      if (nToppings > filteredToppings.length) {
+        desc = `${filteredToppings.join(', ')}, and ${
+          nToppings - filteredToppings.length
+        } more`;
+      } else {
+        desc = filteredToppings.join(', ');
+      }
+      // console.log(toppings);
+      return {
+        title,
+        media,
+        subtitle: desc, // toppings.reduce((t) => t.name).join(''),
+      };
+    },
+  },
 };

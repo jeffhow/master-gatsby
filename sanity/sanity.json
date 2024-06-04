@@ -2,7 +2,7 @@
   "root": true,
   "api": {
     "projectId": "7udw1buu",
-    "dataset": "default-data"
+    "dataset": "production"
   },
   "project": {
     "name": "slicks-slices"
